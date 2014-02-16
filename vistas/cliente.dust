@@ -10,8 +10,34 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		-->
 		<script src="javascript/jquery-1.10.2.min.js"></script>
+		<script src='/socket.io/socket.io.js'></script>
 
-		<script type="text/javascript"></script>
+		<script type="text/javascript">
+			$(function(){
+				/*nos conocemos al web socket */
+				var socket = io.connect("http://localhost:8021");
+				socket.on("mensaje_al_cliente", function(datosServidor){
+					var mensajecaja = $("#mensajes");
+					var mensaje = "<div class='mensaje'><span> "+ datosServidor.nombre + "</span>"+":<span color='black'>"+ datosServidor.mensaje + "</span>";
+					mensajecaja.append(mensaje); 
+					
+				});
+				var boton = $("#boton");
+				boton.click(function(){
+					
+				var mensajecaja = $("#mensaje-usuario");
+				var nombrecaja = $("#nombre-usuario");
+				var mensaje = mensajecaja.val();
+				var nombre = nombrecaja.val();
+				
+				socket.emit("mensaje_al_servidor",{
+					mensaje:mensaje,
+					nombre:nombre
+				});
+				
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<div id="chat">
@@ -21,12 +47,7 @@
 
 			<!-- caja de mensajes de los nuevos usuarios -->
 			<div id="mensajes">
-				<div class="mensaje">
-					<span>Ismael dice:</span> bla bla bla
-				</div>
-				<div class="mensaje">
-					<span>Ismael dice:</span> bla bla bla
-				</div>
+				
 			</div>
 
 			<!-- mensaje del usuario -->
